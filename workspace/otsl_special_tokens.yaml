@@ -1,0 +1,7 @@
+# OTSL Special Tokens
+"<fcel>": "Anchor cell containing content. Acts as the top-left origin of any merged region."
+"<ecel>": "A standalone empty table cell with no content."
+"<lcel>": "Horizontal merge continuation cell belonging to an anchor on its left."
+"<ucel>": "Vertical merge continuation cell belonging to an anchor above."
+"<xcel>": "Cell that is both horizontally and vertically merged with the top-left anchor."
+"<nl>": "End-of-row marker."

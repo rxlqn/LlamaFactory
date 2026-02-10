@@ -738,5 +738,85 @@
       "prompt": "content"
     },
     "folder": "python"
+  },
+  "ocrsft_3_1_train": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.1/train.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_1_eval": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.1/val.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_2_train": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.2/train.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_2_eval": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.2/val.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_3_train": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.3/train_filtered.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_3_eval": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.3/val_filtered.jsonl",
+    "columns": {  
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_4_html_train": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.4/train.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_4_html_eval": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.4/val.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_4_otsl_train": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.4/train_otsl.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
+  },
+  "ocrsft_3_4_otsl_eval": {
+    "file_name": "/cpfs2/shared/data/QwenVLTrain/OcrSft/3.4/val_otsl.jsonl",
+    "columns": {
+      "prompt": "prompt",
+      "response": "response",
+      "images": "image_paths"
+    }
   }
 }

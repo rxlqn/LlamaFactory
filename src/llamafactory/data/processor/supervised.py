@@ -40,6 +40,9 @@ class SupervisedDatasetProcessor(DatasetProcessor):
         videos: list["VideoInput"],
         audios: list["AudioInput"],
     ) -> tuple[list[int], list[int]]:
+
+        ## add images to messages for custom ocrsft data
+        prompt[0]['content'] = '<image>' + prompt[0]['content']
         messages = self.template.mm_plugin.process_messages(prompt + response, images, videos, audios, self.processor)
         input_ids, labels = self.template.mm_plugin.process_token_ids(
             [], [], images, videos, audios, self.tokenizer, self.processor
@@ -53,9 +56,30 @@ class SupervisedDatasetProcessor(DatasetProcessor):
             if total_length >= self.data_args.cutoff_len:
                 break
 
-            source_len, target_len = infer_seqlen(
-                len(source_ids), len(target_ids), self.data_args.cutoff_len - total_length
-            )
+            # source_len, target_len = infer_seqlen(
+            #     len(source_ids), len(target_ids), self.data_args.cutoff_len - total_length
+            # )
+            
+            MIN_TARGET_TOKENS = 10
+
+            remaining_len = self.data_args.cutoff_len - total_length
+
+            # 原始长度
+            source_len = len(source_ids)
+            target_len = len(target_ids)
+
+            # 先假设不截 source，能给 target 的最大长度
+            max_target_len = remaining_len - source_len
+
+            if max_target_len >= MIN_TARGET_TOKENS:
+                # 情况 1：空间够，正常优先截断 target
+                target_len = min(target_len, max_target_len)
+            else:
+                # 情况 2：空间不够 10 个 target，需要截 source
+                target_len = min(target_len, MIN_TARGET_TOKENS)
+                source_len = max(0, remaining_len - target_len)
+
+            # 实际截断
             source_ids = source_ids[:source_len]
             target_ids = target_ids[:target_len]
             total_length += source_len + target_len
