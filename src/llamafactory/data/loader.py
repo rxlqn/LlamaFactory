@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Literal, Optional, Union
 
 import numpy as np
@@ -273,6 +274,16 @@ def _get_preprocessed_dataset(
     return dataset
 
 
+@contextmanager
+def _override_streaming(data_args: "DataArguments", value: bool):
+    original = data_args.streaming
+    data_args.streaming = value
+    try:
+        yield
+    finally:
+        data_args.streaming = original
+
+
 def get_dataset(
     template: "Template",
     model_args: "ModelArguments",
@@ -301,14 +312,15 @@ def get_dataset(
     # Load and preprocess dataset
     with training_args.main_process_first(desc="load dataset", local=(not data_args.data_shared_file_system)):
         dataset = _get_merged_dataset(data_args.dataset, model_args, data_args, training_args, stage)
-        eval_dataset = _get_merged_dataset(
-            data_args.eval_dataset,
-            model_args,
-            data_args,
-            training_args,
-            stage,
-            return_dict=data_args.eval_on_each_dataset,
-        )
+        with _override_streaming(data_args, False):
+            eval_dataset = _get_merged_dataset(
+                data_args.eval_dataset,
+                model_args,
+                data_args,
+                training_args,
+                stage,
+                return_dict=data_args.eval_on_each_dataset,
+            )
 
     with training_args.main_process_first(desc="pre-process dataset", local=(not data_args.data_shared_file_system)):
         # move front to make sure eval_dataset(if contain or split) can preprocessed appropriately
@@ -319,10 +331,11 @@ def get_dataset(
                 train_dict["train"], data_args, training_args, stage, template, tokenizer, processor, is_eval=False
             )
 
-        for key in eval_dict:
-            eval_dict[key] = _get_preprocessed_dataset(
-                eval_dict[key], data_args, training_args, stage, template, tokenizer, processor, is_eval=True
-            )
+        with _override_streaming(data_args, False):
+            for key in eval_dict:
+                eval_dict[key] = _get_preprocessed_dataset(
+                    eval_dict[key], data_args, training_args, stage, template, tokenizer, processor, is_eval=True
+                )
 
         # Combine train and eval dictionaries
         dataset_dict = DatasetDict({**train_dict, **eval_dict})
