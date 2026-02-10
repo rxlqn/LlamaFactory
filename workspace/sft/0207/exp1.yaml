@@ -1,0 +1,67 @@
+### model
+model_name_or_path: /cpfs2/shared/models/Qwen3-VL-2B-Instruct
+image_max_pixels: 589824 # 768 * 768
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: false
+freeze_language_model: false
+deepspeed: examples/deepspeed/ds_z2_config.json
+
+
+## training nums 2173229
+## steps = 2173229 / (4 * 4 * 4GPU) = 33,956.703125
+### streaming
+buffer_size: 128
+preprocessing_batch_size: 128
+streaming: true
+accelerator_config:
+  dispatch_batches: false
+max_steps: 33956
+
+
+### dataset
+# dataset: mllm_demo,identity,alpaca_en_demo
+dataset: ocrsft_3_4_html_train
+template: qwen3_vl_nothink
+cutoff_len: 4096
+# max_samples: 1000
+preprocessing_num_workers: 16
+dataloader_num_workers: 8
+
+
+### output
+# exp_name: qwen3_vl_2b_ocr_sft_0207_exp1
+
+output_dir: saves/ocr_sft/qwen3_vl_2b_ocr_sft_0207_exp1
+logging_steps: 10
+save_steps: 500
+save_total_limit: 3
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+run_name: qwen3_vl_2b_ocr_sft_0207_exp1
+
+### train
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
+learning_rate: 1.0e-6
+# num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.05 ## 2600 steps
+bf16: true
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+### eval
+# val_size: 0.1
+eval_dataset: ocrsft_3_4_html_eval
+per_device_eval_batch_size: 4
+eval_strategy: steps
+eval_steps: 500
