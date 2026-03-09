@@ -13,19 +13,16 @@ freeze_multi_modal_projector: false
 freeze_language_model: false
 deepspeed: examples/deepspeed/ds_z2_config.json
 
-# special tokens
-new_special_tokens_config: /cpfs2/liweiyuan/workspace/LlamaFactory/workspace/otsl_special_tokens.yaml
-init_special_tokens: desc_init
 
-## training nums 4227967
-## steps = 4227967 / (4 * 4 * 4GPU) = 66,061.984375
+## training nums 2338938
+## steps = 2338938 / (4 * 4 * 4GPU) = 36,545.90625
 ### streaming
 buffer_size: 128
 preprocessing_batch_size: 128
 streaming: true
 accelerator_config:
   dispatch_batches: false
-max_steps: 66061
+max_steps: 36545
 
 
 ### dataset
@@ -39,17 +36,17 @@ dataloader_num_workers: 8
 
 
 ### output
-# exp_name: qwen3_vl_2b_ocr_sft_0205_exp1
+# exp_name: qwen3_vl_2b_ocr_sft_0213_exp1
 
-output_dir: saves/degbu
+output_dir: saves/ocr_sft/qwen3_vl_2b_ocr_sft_0213_exp1
 logging_steps: 10
 save_steps: 500
 save_total_limit: 3
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
-# report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
-# run_name: qwen3_vl_2b_ocr_sft_0205_exp1
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+run_name: qwen3_vl_2b_ocr_sft_0213_exp1
 
 ### train
 per_device_train_batch_size: 4
@@ -57,7 +54,7 @@ gradient_accumulation_steps: 4
 learning_rate: 1.0e-6
 # num_train_epochs: 2.0
 lr_scheduler_type: cosine
-warmup_ratio: 0.02 ## 2600 steps
+warmup_ratio: 0.05 ## 2600 steps
 bf16: true
 ddp_timeout: 180000000
 resume_from_checkpoint: null
@@ -67,4 +64,4 @@ resume_from_checkpoint: null
 eval_dataset: ocrsft_3_5_html_eval
 per_device_eval_batch_size: 4
 eval_strategy: steps
-eval_steps: 10
+eval_steps: 500

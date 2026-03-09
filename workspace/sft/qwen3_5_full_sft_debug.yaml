@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: /cpfs2/shared/models/Qwen3-VL-2B-Instruct
+model_name_or_path: /cpfs2/shared/models/Qwen3.5/Qwen3.5-2B
 image_max_pixels: 589824 # 768 * 768
 video_max_pixels: 16384
 trust_remote_code: true
@@ -14,8 +14,8 @@ freeze_language_model: false
 deepspeed: examples/deepspeed/ds_z2_config.json
 
 # special tokens
-new_special_tokens_config: /cpfs2/liweiyuan/workspace/LlamaFactory/workspace/otsl_special_tokens.yaml
-init_special_tokens: desc_init
+# new_special_tokens_config: /cpfs2/liweiyuan/workspace/LlamaFactory/workspace/otsl_special_tokens.yaml
+# init_special_tokens: desc_init
 
 ## training nums 4227967
 ## steps = 4227967 / (4 * 4 * 4GPU) = 66,061.984375
@@ -30,18 +30,18 @@ max_steps: 66061
 
 ### dataset
 # dataset: mllm_demo,identity,alpaca_en_demo
-dataset: ocrsft_3_5_html_train
-template: qwen3_vl_nothink
+dataset: ocrsft_4_0_html_train
+template: qwen3_5_nothink
 cutoff_len: 4096
 # max_samples: 1000
-preprocessing_num_workers: 16
-dataloader_num_workers: 8
+preprocessing_num_workers: 1
+dataloader_num_workers: 2
 
 
 ### output
 # exp_name: qwen3_vl_2b_ocr_sft_0205_exp1
 
-output_dir: saves/degbu
+output_dir: saves/debug
 logging_steps: 10
 save_steps: 500
 save_total_limit: 3
@@ -52,8 +52,8 @@ save_only_model: false
 # run_name: qwen3_vl_2b_ocr_sft_0205_exp1
 
 ### train
-per_device_train_batch_size: 4
-gradient_accumulation_steps: 4
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 1
 learning_rate: 1.0e-6
 # num_train_epochs: 2.0
 lr_scheduler_type: cosine
@@ -64,7 +64,7 @@ resume_from_checkpoint: null
 
 ### eval
 # val_size: 0.1
-eval_dataset: ocrsft_3_5_html_eval
-per_device_eval_batch_size: 4
+eval_dataset: ocrsft_4_0_html_eval
+per_device_eval_batch_size: 1
 eval_strategy: steps
 eval_steps: 10

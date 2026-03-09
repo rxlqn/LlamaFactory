@@ -66,4 +66,4 @@ set -x
 #     --bf16 
 
 
-FORCE_TORCHRUN=1 CUDA_VISIBLE_DEVICES=4,5,6,7 llamafactory-cli train workspace/sft/qwen3vl_full_sft_debug.yaml
+DISABLE_VERSION_CHECK=1 FORCE_TORCHRUN=1 CUDA_VISIBLE_DEVICES=3 llamafactory-cli train workspace/sft/qwen3_5_full_sft_debug.yaml
